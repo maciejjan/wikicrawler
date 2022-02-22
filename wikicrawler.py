@@ -1,12 +1,12 @@
 import argparse
 import csv
-import sys
 import os.path
+import sys
 import wikipedia
 
 
 def crawl(titles, maxdepth=1):
-	queue = [(title, 1) for title in args.title]
+	queue = [(title, 1) for title in titles]
 	visited = set()
 	while queue:
 		title, depth = queue.pop(0)
@@ -43,6 +43,11 @@ def parse_arguments():
 
 if __name__ == '__main__':
 	args = parse_arguments()
-	crawler = crawl(args.title, args.maxdepth)
+	titles = args.title
+	if '-' in titles:
+		titles.remove('-')
+		for line in sys.stdin:
+			titles.append(line.rstrip())
+	crawler = crawl(titles, args.maxdepth)
 	write_output(crawler, args.output_dir)
 
